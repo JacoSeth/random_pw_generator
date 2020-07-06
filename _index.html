@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script type='text/javascript'>
+    var specialChars = [` `, `!`, `"`, `#`, `$`, `%`, `&`, `'`, `(`, `)`, `*`, `+`, `,`, `-`, `.`, `/`, `:`, `;`, `<`, `=`, `>`, `?`, `@`, `[`, `\\`, `]`, `^`, `_`, `\``, `{`, `|`, `}`, `~`, ];
+    var numChars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']; 
+    var lowerChars = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+    var upperChars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+    
+    var passwordChoices = []; 
+    var password = [];
+    var selectedChars = [];
+    var passwordLength;
+
+    function getPasswordOptions(){
+        var confirmSpecialChars = confirm('Do you want to use special characters (Standard US Keyboard) in the password generator?');
+        console.log("Password will contain special characters: " + confirmSpecialChars);
+        var confirmNumChars = confirm('Do you want to use numbers in the password generator?');
+        console.log("Password will contain numbers: " + confirmNumChars);
+        var confirmLowerChars = confirm('Do you want to use lower case letters in the password generator?');
+        console.log("Password will contain lower case letters: " + confirmLowerChars)
+        var confirmUpperChars = confirm('Do you want to use upper case letters in the password generator?');
+        console.log("Password will contain upper case letters: " + confirmUpperChars);
+        var passwordOptions = [confirmSpecialChars, confirmNumChars, confirmLowerChars, confirmUpperChars]
+        console.log(passwordOptions)
+        for (i = 0; i < passwordOptions.length; i++){
+          if (passwordOptions[i] === true){
+            var useOption = ('SNLU'[i] + ' = ' + passwordOptions[i])
+            passwordChoices.push(useOption);
+          }
+          else {
+            var omitOption = ('SNLU'[i] + ' = ' + passwordOptions[i])
+            passwordChoices.push(omitOption)
+          }
+        };
+        console.log(passwordChoices);
+      };
+
+    function passChoicesToArray(arr) {
+      // First, check the choices. If the value === true, pass that option to a password generator. If the option = false, do nothing.
+      for (i = 0; i < arr.length; i++){
+        if (arr[i] === "S = true"){
+          console.log('Using '+ arr[i][0])
+          selectedChars.push(specialChars)
+        } 
+        else if (arr[i] === "N = true"){
+          console.log('Using '+ arr[i][0])
+          selectedChars.push(numChars)
+        }
+        else if (arr[i] === "L = true"){
+          console.log('Using '+ arr[i][0])
+          selectedChars.push(lowerChars)
+        }
+        else if (arr[i] === "U = true"){
+          console.log('Using '+ arr[i][0])
+          selectedChars.push(upperChars)
+        }
+        else {
+          console.log('Skipping '+ arr[i][0])
+        }
+      }
+    }
+
+    function checkPWParams(){
+      var promptPasswordLength = prompt('How long should the password be? (Must be between 8 and 128 characters)'); 
+      console.log("Password Character Length: " + promptPasswordLength);
+      if (promptPasswordLength < 8 || promptPasswordLength > 128){
+        alert('Sorry, your password must be between 8 and 128 characters long')
+        checkPWParams();
+        }
+      else {
+      // run password logic here
+        passwordLength = promptPasswordLength;
+        console.log('The password length is: ' + passwordLength)
+        getPasswordOptions();
+        passChoicesToArray(passwordChoices);
+        console.log(selectedChars);
+        createPassword(selectedChars);
+        }
+    }
+
+    function getRndInteger(min, max){
+        return Math.floor(Math.random() * (max - min)) + min;
+    };
+
+    function createPassword(options) {
+        // For each element in passwordLength
+        for (i = 0; i < passwordLength; i++){
+            console.log('Password Element '+ i)
+            // Select which charSet to use
+            var randomElement = getRndInteger(0, options.length)
+            console.log("Selected Character Set: " + randomElement)
+            var randomCharSetSelection = options[randomElement];
+            // Select a random element from the charSet
+            var varChar = getRndInteger(0, randomCharSetSelection.length)
+            // var varChar = Math.floor((Math.random() * 5)/4);
+            // Push the random element to password
+            password.push(randomCharSetSelection[varChar])
+            console.log("Character Selected: " + randomCharSetSelection[varChar])
+        }
+    }
+    
+    
+    // createPassword(selectedChars);
+    // var password = password.join('');
+    // console.log(password)
+    checkPWParams();
+    var password = password.join('');
+    console.log(password)
+    </script>
+  
+</body>
+</html>
